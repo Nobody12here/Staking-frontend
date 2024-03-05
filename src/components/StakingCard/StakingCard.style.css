@@ -1,0 +1,95 @@
+.heading-container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10%;
+  width: 50%;
+  font-size: 32px;
+  color: white;
+}
+.text {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+.bold-text {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  background: linear-gradient(93.09deg, #f79c24 -5.2%, #8e4bdc 96.15%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.card-container {
+  display: flex;
+  justify-content: center;
+}
+.main-container {
+  width: 60%;
+  background-color: #1e1e1e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0px 0px 94px 7px #00000073;
+  border-radius: 24px;
+  margin-bottom: 100px;
+}
+.button-container {
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  background-color: #0e0d0d;
+  ;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.t1 {
+  color: white;
+}
+.total-amount {
+  font-weight: 400;
+  font-size: 44px;
+  text-align: center;
+}
+.heading2 {
+  font-weight: 600;
+  font-size: 24px;
+  text-align: center;
+}
+.text2 {
+  text-align: center;
+}
+.btn {
+  width: 40%;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: #1e1e1e;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  font-family: "Space Grotesk", sans-serif;
+}
+.btn-withdraw {
+  background-color: #0e0d0d;
+}
+.btn2-container{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+.btn2 {
+  background-color:#1E1E1E80;
+  padding: 18px 48px 18px 48px;
+  border-radius: 12px;
+  border: 1px;
+  color:white;
+  font-style: 'Inter';
+  border: 1px solid #f79c24;
+}
+.btn-how{
+    font-family: 'Inter';
+    border-color:  #FFFFFFB2;
+}
+.btn-connect{
+    font-family: 'Inter';
+}
