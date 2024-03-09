@@ -59,7 +59,19 @@
 .text2 {
   text-align: center;
 }
+.withdraw-container{
+  width:80%;
+}
 .btn {
+  font-family: "Space Grotesk", sans-serif;
+  width:40%;
+  color:white;
+  background-color: #0e0d0d;
+}
+.btn-withdraw {
+  background-color: #0e0d0d;
+}
+.active{
   width: 40%;
   padding-top: 16px;
   padding-bottom: 16px;
@@ -69,13 +81,12 @@
   border-radius: 10px;
   font-family: "Space Grotesk", sans-serif;
 }
-.btn-withdraw {
-  background-color: #0e0d0d;
-}
 .btn2-container{
+    align-items: center;
     width: 100%;
     display: flex;
     justify-content: space-around;
+    padding-bottom: 22px;
 }
 .btn2 {
   background-color:#1E1E1E80;
