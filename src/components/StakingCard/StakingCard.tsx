@@ -1,4 +1,4 @@
-import { Dispatch, FC } from "react";
+import {  FC } from "react";
 import { useState } from "react";
 import "./StakingCard.style.css";
 import "./InputForm.style.css";
