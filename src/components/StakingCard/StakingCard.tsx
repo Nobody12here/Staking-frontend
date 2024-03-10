@@ -1,17 +1,15 @@
-import {  FC } from "react";
-import { useState } from "react";
-import "./StakingCard.style.css";
-import "./InputForm.style.css";
-import { useAccount } from "wagmi";
+import { FC, useEffect, useState } from "react";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import WithdrawDetails from "../WithdrawDetails/WithdrawDetails";
-
-
-interface InputFieldProps {
-  package: "unlock" | "locked";
-  setPackage: React.Dispatch<React.SetStateAction<"unlock" | "locked">>;
-}
-
-
+import { contract_address, contract_abi } from "../../contract.ts";
+import {
+  ConnectAndHowButtons,
+  InputField,
+  DurationDropdown,
+  DisconnectAndSubmitButtons,
+} from "../Input";
+import "./StakingCard.style.css";
+import { handleSubmit, readUserInformation } from "../../utils/index.ts";
 
 const StakingDetails: FC = () => {
   return (
@@ -23,105 +21,30 @@ const StakingDetails: FC = () => {
   );
 };
 
-const DurationDropdown: FC = () => {
-  const [selectedDuration, setSelectedDuration] = useState<number | null>(null);
-
-  const handleDurationChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    setSelectedDuration(parseInt(event.target.value));
-  };
-  return (
-    <div className="dropdown-container">
-      <label className="dropdown-label" htmlFor="duration">
-        Select Duration
-      </label>
-      <select
-        className="dropdown"
-        id="duration"
-        value={selectedDuration || ""}
-        onChange={handleDurationChange}
-      >
-        
-        <option value="3"><span>3 months </span>
-        <span>6.2%APY </span>
-        </option>
-        <option value="9">9 months</option>
-        <option value="12">12 months</option>
-        <option value="15">15 months</option>
-        <option value="18">18 months</option>
-        <option value="24">24 months</option>
-      </select>
-    </div>
-  );
-};
-
-const ConnectAndHowButtons: FC = () => {
-  return (
-    <div className="btn2-container">
-      <button className="btn2 btn-how">How to Stake</button>
-      <w3m-button size="md" balance="hide" />
-    </div>
-  );
-};
-const InputField: FC<InputFieldProps> = (props): JSX.Element => {
-  console.log(props);
-
-  const setSelectedPackage = props.setPackage;
-  const selectedPackage = props.package;
-  const handlePackageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedPackage(event.target.value as "unlock" | "locked");
-  };
-  return (
-    <>
-      <div className="input-container">
-        <label className="token-inp-label" htmlFor="token-amount">
-          Please add an amount to stake
-        </label>
-        <input className="token-inp" name="token-amount" type="number" />
-      </div>
-
-      <div className="packages-container">
-        <p className="packages-heading">Packages</p>
-
-        <div className="package-radio-container">
-          <div>
-            <input
-              type="radio"
-              name="package"
-              id="unlock"
-              value={"unlock"}
-              checked={selectedPackage === "unlock"}
-              onChange={handlePackageChange}
-            />
-            <label className="label" htmlFor="package1">
-              Unlocked staking 0.02% APY
-            </label>
-          </div>
-
-          <div>
-            <input
-              type="radio"
-              name="package"
-              id="locked"
-              value={"locked"}
-              checked={selectedPackage === "locked"}
-              onChange={handlePackageChange}
-            />
-            <label className="label" htmlFor="package2">
-              Locked Staking
-            </label>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
 const Card: FC = (): JSX.Element => {
+  const account = useAccount();
+  const { writeContractAsync: approveTokens } = useWriteContract();
+  const { writeContractAsync: farmTokens, error: farmError } =
+    useWriteContract();
+  const [userInformation, setUserInformation] = useState<unknown>(null);
+  const [tokenAmount, setTokenAmount] = useState<number>(0);
+  const UserInformation = useReadContract({
+    abi: contract_abi,
+    address: contract_address,
+    functionName: "UserInformation",
+    args: [account.address],
+  });
+  useEffect(() => {
+    if (!UserInformation.isLoading) {
+      setUserInformation(UserInformation.data);
+    }
+  }, [UserInformation.isLoading]);
+  readUserInformation(userInformation as Array<unknown>);
   const [selectedPackage, setSelectedPackage] = useState<"unlock" | "locked">(
     "unlock"
   );
-  const account = useAccount();
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(14);
+  const isAccountConnected = useAccount().isConnected;
   const [activeButton, setActiveButton] = useState<"Stake" | "Withdraw">(
     "Stake"
   );
@@ -130,7 +53,6 @@ const Card: FC = (): JSX.Element => {
     setActiveButton(button);
   };
 
-  const isAccountConnected = account.isConnected;
   console.log(activeButton);
   return (
     <>
@@ -157,17 +79,41 @@ const Card: FC = (): JSX.Element => {
         </div>
 
         {activeButton === "Stake" && <StakingDetails />}
-        {activeButton === "Withdraw" && <WithdrawDetails />}
+        {activeButton === "Withdraw" && <WithdrawDetails userInformation={userInformation as Array<unknown>} />}
 
         {!isAccountConnected && <ConnectAndHowButtons />}
         {isAccountConnected && activeButton === "Stake" && (
           <InputField
+            tokenAmount={tokenAmount}
+            setTokenAmount={setTokenAmount}
             package={selectedPackage}
             setPackage={setSelectedPackage}
           />
         )}
-        {isAccountConnected && activeButton === "Stake" && selectedPackage === "locked" && <DurationDropdown />}
-       </div>
+        {isAccountConnected &&
+          activeButton === "Stake" &&
+          selectedPackage === "locked" && (
+            <DurationDropdown
+              selectedDuration={selectedDuration}
+              setSelectedDuration={setSelectedDuration}
+            />
+          )}
+
+        {isAccountConnected && activeButton === "Stake" && (
+          <DisconnectAndSubmitButtons
+            handleSubmit={() => {
+              handleSubmit(
+                farmError,
+                approveTokens,
+                farmTokens,
+                tokenAmount,
+                selectedDuration,
+                selectedPackage
+              );
+            }}
+          />
+        )}
+      </div>
     </>
   );
 };

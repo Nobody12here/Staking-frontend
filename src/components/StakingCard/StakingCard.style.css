@@ -1,8 +1,9 @@
+
 .heading-container {
   margin-left: auto;
   margin-right: auto;
   margin-top: 10%;
-  width: 50%;
+  width: 600px;
   font-size: 32px;
   color: white;
 }
@@ -16,6 +17,7 @@
   font-weight: 700;
   background: linear-gradient(93.09deg, #f79c24 -5.2%, #8e4bdc 96.15%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .card-container {
@@ -44,6 +46,9 @@
   padding-bottom: 10px;
 }
 .t1 {
+  margin: 0;
+  margin-top: 21px;
+  margin-bottom: 22px;
   color: white;
 }
 .total-amount {
@@ -85,12 +90,23 @@
     align-items: center;
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     padding-bottom: 22px;
 }
 .btn2 {
+  margin-right: 48px;
   background-color:#1E1E1E80;
   padding: 18px 48px 18px 48px;
+  border-radius: 12px;
+  border: 1px;
+  color:white;
+  font-style: 'Inter';
+  border: 1px solid #f79c24;
+}
+.stake {
+  margin-left: 42px;
+  background-color:#1E1E1E80;
+  padding: 12px 28px 12px 28px;
   border-radius: 12px;
   border: 1px;
   color:white;

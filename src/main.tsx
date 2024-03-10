@@ -3,9 +3,10 @@ import ReactDOM from "react-dom/client";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { WagmiProvider } from "wagmi";
-import { arbitrum, mainnet } from "wagmi/chains";
+import { arbitrum, mainnet, sepolia } from "wagmi/chains";
 import App from "./App.tsx";
 import "./index.css";
+import { dark } from "@mui/material/styles/createPalette";
 const projectId = "eb79a9946b4e4b2ae10c8531e04aac3f";
 const metadata = {
   name: "Web3Modal",
@@ -14,7 +15,7 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 
-const chains = [mainnet, arbitrum] as const;
+const chains = [mainnet, sepolia] as const;
 const config = defaultWagmiConfig({
   chains, // required
   projectId, // required
@@ -23,9 +24,11 @@ const config = defaultWagmiConfig({
 createWeb3Modal({
   wagmiConfig: config,
   projectId,
-  themeVariables:{
-    '--w3m-color-mix': '#0000',
-    '--w3m-color-mix-strength': 40
+  themeMode: "dark",
+  themeVariables: {
+    "--w3m-accent": '#1e1e1e',
+    '--w3m-color-mix-strength': 60,
+    "--w3m-border-radius-master": "1px",
   }
 });
 
