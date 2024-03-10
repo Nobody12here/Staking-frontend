@@ -3,10 +3,9 @@ import ReactDOM from "react-dom/client";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { WagmiProvider } from "wagmi";
-import { arbitrum, mainnet, sepolia } from "wagmi/chains";
+import {  mainnet, sepolia } from "wagmi/chains";
 import App from "./App.tsx";
 import "./index.css";
-import { dark } from "@mui/material/styles/createPalette";
 const projectId = "eb79a9946b4e4b2ae10c8531e04aac3f";
 const metadata = {
   name: "Web3Modal",
