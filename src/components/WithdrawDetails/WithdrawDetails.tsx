@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { formatEther } from "viem";
 import "./WithdrawDetails.style.css";
+import { useAccount } from "wagmi";
 interface WithdrawDetailsProps {
   userInformation: Array<unknown>;
 }
@@ -23,6 +24,8 @@ function releaseTime(lockupDays: bigint, depositTime: number): string {
   return remainingDays > 0 ? `${formattedReleaseDate}` : "Released";
 }
 const WithdrawDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
+  const {isConnected} = useAccount()
+  if(isConnected === false) return (<div style={{color:"white",marginBottom:"24px"}}>Connect to wallet</div>)
   const renderWithdrawDetails = () => {
     const tokensStaked = userInformation[0] as Array<unknown>;
     const LockupTime = userInformation[1] as Array<unknown>;
