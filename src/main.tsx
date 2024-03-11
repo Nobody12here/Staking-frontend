@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import { WagmiProvider } from "wagmi";
-import {  mainnet, sepolia } from "wagmi/chains";
+import {   sepolia } from "wagmi/chains";
 import App from "./App.tsx";
 import "./index.css";
 const projectId = "eb79a9946b4e4b2ae10c8531e04aac3f";
@@ -14,7 +14,7 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 
-const chains = [mainnet, sepolia] as const;
+const chains = [sepolia] as const;
 const config = defaultWagmiConfig({
   chains, // required
   projectId, // required
