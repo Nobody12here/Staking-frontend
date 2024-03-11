@@ -9,7 +9,7 @@ function Header() {
     return ( 
         <>
             <div className="header-container">
-                <img src={Logo} alt="Logo" width={"228px"} />
+                <img src={Logo} alt="Logo" className='Logo' width={"228px"} />
                 <div className='social-icons'>
                     <img src={Discord} alt="discord" width={'32px'} height={'32px'} />
                     <img src={Twitter} alt="twiter" width={'32px'} height={'32px'} />
