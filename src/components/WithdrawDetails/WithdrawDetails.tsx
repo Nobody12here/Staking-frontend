@@ -1,9 +1,19 @@
 import { FC } from "react";
 import { formatEther } from "viem";
 import "./WithdrawDetails.style.css";
-import { useAccount } from "wagmi";
+import { Config, useAccount, useWriteContract } from "wagmi";
+import { contract_abi, contract_address } from "../../contract";
+import { WriteContractMutateAsync } from "wagmi/query";
 interface WithdrawDetailsProps {
   userInformation: Array<unknown>;
+}
+function unstake(index:number[],harvest:WriteContractMutateAsync<Config, unknown>){
+  harvest({
+    abi: contract_abi,
+    address: contract_address,
+    functionName: "harvest",
+    args: [index],
+  });
 }
 function convertUnixTime(unixTime: number) {
   const time = parseInt(unixTime.toString());
@@ -24,6 +34,7 @@ function releaseTime(lockupDays: bigint, depositTime: number): string {
   return remainingDays > 0 ? `${formattedReleaseDate}` : "Released";
 }
 const WithdrawDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
+  const {writeContractAsync:harvest} = useWriteContract();
   const {isConnected} = useAccount()
   if(isConnected === false) return (<div style={{color:"white",marginBottom:"24px"}}>Connect to wallet</div>)
   const renderWithdrawDetails = () => {
@@ -44,7 +55,9 @@ const WithdrawDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
           <td>{convertUnixTime(depositTime)}</td>
           <td>{formatEther(tokenAmount as bigint)}</td>
           <td>
-          <button disabled={releaseTime(lockupTime,depositTime) === 'Released'?false:true}>Withdraw</button>
+          <button onClick={()=>{
+            unstake([i],harvest)
+          }} disabled={releaseTime(lockupTime,depositTime) === 'Released'?false:true}>Withdraw</button>
           </td>
         </tr>
       );

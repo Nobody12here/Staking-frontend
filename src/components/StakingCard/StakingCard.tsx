@@ -108,7 +108,7 @@ const Card: FC = (): JSX.Element => {
       }
     }
   }
-
+  
   const [selectedPackage, setSelectedPackage] = useState<"unlock" | "locked">(
     "unlock"
   );
@@ -163,6 +163,7 @@ const Card: FC = (): JSX.Element => {
             setTokenAmount={setTokenAmount}
             package={selectedPackage}
             setPackage={setSelectedPackage}
+            
           />
         )}
         {isAccountConnected &&
