@@ -102,7 +102,7 @@ const InputField: FC<InputFieldProps> = (props): JSX.Element => {
               onChange={handlePackageChange}
             />
             <label className="label" htmlFor="package1">
-              Unlocked staking 0.02% APY
+              Unlocked staking at 2.5%
             </label>
           </div>
 
