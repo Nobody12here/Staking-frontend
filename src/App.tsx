@@ -1,4 +1,5 @@
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer";
 import StakingCard from "./components/StakingCard/StakingCard";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -12,6 +13,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Header></Header>
         <StakingCard></StakingCard>
+        <Footer></Footer>
       </QueryClientProvider>
     </>
   );

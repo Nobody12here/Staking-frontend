@@ -1,0 +1,44 @@
+@media (max-width: 600px) {
+    
+    .social-icons{
+        display: none !important;
+    }
+    .Logo{
+        width: 100px;
+    }
+}
+.footer-links{
+    display: flex;
+    flex-direction: column;
+   
+    justify-content: space-around;
+    font-size: 12px;
+    text-decoration: none;
+    color: white;
+}
+.footer-links >a{
+    padding-bottom: 12px;
+    text-decoration: none;
+    color: white;
+}   
+.header-container{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    background-color: #151515; 
+    color:white;
+}
+.social-icons{
+    display: flex;
+    justify-content: space-around;
+    width: 25%;
+}
+.offical-btn{
+    border: 1px solid #F79C24;
+    border-radius: 12px;
+    padding: 16px;
+    background-color: #1E1E1E80;
+    color:#F79C24;
+}
