@@ -1,5 +1,5 @@
 import { erc20Abi } from "viem";
-const contract_address = "0x05DB98bd0cCd708767e79CF629Ee73cc4753Cc4d"
+const contract_address = "0xA1f4D218eF854521C78c0C078d9ac79D8BCb6e8c"
 const contract_abi = [
 	{
 		"inputs": [
