@@ -12,13 +12,7 @@ function Footer() {
                 <img src={Logo} alt="Logo" className='Logo' width={"228px"} />
                 <div>
 
-                <div className='social-icons'>
-                    <img src={Discord} alt="discord" width={'32px'} height={'32px'} />
-                    <img src={Twitter} alt="twiter" width={'32px'} height={'32px'} />
-                    <img src={Telegram} alt="telegram" width={'32px'} height={'32px'} />
-                    <img src={Whatsapp} alt="whatsapp" width={'32px'} height={'32px'} />
-                    <img src={Youtube} alt="youtube" width={'32px'} height={'32px'} />
-                </div>
+                
                 
                 </div>
                 <div className='footer-links'>
