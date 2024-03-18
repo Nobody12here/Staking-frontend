@@ -1,10 +1,10 @@
 import { http, createConfig } from '@wagmi/core'
-import { mainnet, sepolia } from '@wagmi/core/chains'
+import {  sepolia } from '@wagmi/core/chains'
 
 export const config = createConfig({
-  chains: [mainnet, sepolia],
+  chains: [ sepolia],
   transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
+    
+    [sepolia.id]: http('https://ethereum-sepolia-rpc.publicnode.com'),
   },
 })

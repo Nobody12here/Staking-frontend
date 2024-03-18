@@ -10,8 +10,8 @@ interface DurationFieldProps {
 interface InputFieldProps {
   tokenAmount: number;
   setTokenAmount: React.Dispatch<React.SetStateAction<number>>;
-  package: "unlock" | "locked";
-  setPackage: React.Dispatch<React.SetStateAction<"unlock" | "locked">>;
+  package: "unlock" | "lock";
+  setPackage: React.Dispatch<React.SetStateAction<"unlock" | "lock">>;
 }
 const DurationDropdown: FC<DurationFieldProps> = ({
   selectedDuration,
@@ -33,10 +33,10 @@ const DurationDropdown: FC<DurationFieldProps> = ({
         value={selectedDuration || ""}
         onChange={handleDurationChange}
       >
-        <option value="14">14 days</option>
-        <option value="30">1 months</option>
-        <option value="60">2 months</option>
-        <option value="90">3 months</option>
+        <option value="180">6 months</option>
+        <option value="365">12 months</option>
+        <option value="540">18 months</option>
+        <option value="720">24 months</option>
       </select>
     </div>
   );
@@ -66,7 +66,7 @@ const InputField: FC<InputFieldProps> = (props): JSX.Element => {
   const setSelectedPackage = props.setPackage;
   const selectedPackage = props.package;
   const handlePackageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedPackage(event.target.value as "unlock" | "locked");
+    setSelectedPackage(event.target.value as "unlock" | "lock");
   };
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTokenAmount(event.target.value as unknown as number);
@@ -110,9 +110,9 @@ const InputField: FC<InputFieldProps> = (props): JSX.Element => {
             <input
               type="radio"
               name="package"
-              id="locked"
-              value={"locked"}
-              checked={selectedPackage === "locked"}
+              id="lock"
+              value={"lock"}
+              checked={selectedPackage === "lock"}
               onChange={handlePackageChange}
             />
             <label className="label" htmlFor="package2">

@@ -1,13 +1,16 @@
 import { FC, useEffect, useState } from "react";
+import { parseUnits } from "viem";
+import {
+  contract_abi,
+  contract_address,
+  token_abi,
+  token_address,
+} from "../../contract";
+import { config } from "../../config/index.ts";
+import { waitForTransactionReceipt } from "@wagmi/core";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import WithdrawDetails from "../WithdrawDetails/WithdrawDetails";
-import {
-  contract_address,
-  contract_abi,
-  token_address,
-  token_abi,
-} from "../../contract.ts";
-import { config } from "../../config/index.ts";
+
 import {
   ConnectAndHowButtons,
   InputField,
@@ -15,17 +18,16 @@ import {
   DisconnectAndSubmitButtons,
 } from "../Input";
 import "./StakingCard.style.css";
+import { readUserInformations } from "../../utils/index.ts";
 
-import { readUserInformation } from "../../utils/index.ts";
-import { parseUnits } from "viem";
-import { waitForTransactionReceipt } from "wagmi/actions";
+
 interface WithdrawDetailsProps {
   userInformation: Array<unknown>;
 }
 const StakingDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
   const [totalStaked, setTotalStaked] = useState<string>("0");
   useEffect(() => {
-    readUserInformation(userInformation, setTotalStaked);
+    readUserInformations(userInformation, setTotalStaked);
   }, [userInformation]);
   return (
     <div className="text2-container">
@@ -38,78 +40,13 @@ const StakingDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
 
 const Card: FC = (): JSX.Element => {
   const account = useAccount();
+  const [loading, setLoading] = useState<boolean>(false);
   const { writeContractAsync: approveTokens } = useWriteContract();
   const { writeContractAsync: farmTokens } = useWriteContract();
+ 
   const [userInformation, setUserInformation] = useState<unknown>(null);
   const [tokenAmount, setTokenAmount] = useState<number>(0);
-  const UserInformation = useReadContract({
-    abi: contract_abi,
-    address: contract_address,
-    functionName: "UserInformation",
-    args: [account.address],
-  });
-  useEffect(() => {
-    if (!UserInformation.isLoading) {
-      setUserInformation(UserInformation.data);
-    }
-  }, [UserInformation.isLoading]);
-
-  async function handleSubmit() {
-    if (selectedPackage === "locked") {
-      if (selectedDuration) {
-        //First approve the tokens
-        const hash = await approveTokens({
-          abi: token_abi,
-          address: token_address,
-          functionName: "approve",
-          args: [contract_address, parseUnits(tokenAmount.toString(), 18)], // Remove the unnecessary BigInt conversion
-        });
-        const wait = await waitForTransactionReceipt(config, {
-          hash: hash,
-        });
-        console.log(wait);
-
-        try {
-          await farmTokens({
-            abi: contract_abi,
-            address: contract_address,
-            functionName: "farm",
-            args: [parseUnits(tokenAmount.toString(), 18), selectedDuration],
-          });
-          alert("Staked successfully");
-        } catch (error) {
-          alert(error);
-        }
-      } else {
-        console.log("Please select a duration");
-      }
-    } else if (selectedPackage === "unlock") {
-      try {
-        const hash = await approveTokens({
-          abi: token_abi,
-          address: token_address,
-          functionName: "approve",
-          args: [contract_address, parseUnits(tokenAmount.toString(), 18)],
-        });
-        const wait = await waitForTransactionReceipt(config, {
-          hash: hash,
-        });
-        console.log(wait);
-
-        await farmTokens({
-          abi: contract_abi,
-          address: contract_address,
-          functionName: "farm",
-          args: [parseUnits(tokenAmount.toString(), 18), 0],
-        });
-        alert("Staked successfully");
-      } catch (error) {
-        alert(error);
-      }
-    }
-  }
-  
-  const [selectedPackage, setSelectedPackage] = useState<"unlock" | "locked">(
+  const [selectedPackage, setSelectedPackage] = useState<"unlock" | "lock">(
     "unlock"
   );
   const [selectedDuration, setSelectedDuration] = useState<number | null>(14);
@@ -117,12 +54,69 @@ const Card: FC = (): JSX.Element => {
   const [activeButton, setActiveButton] = useState<"Stake" | "Withdraw">(
     "Stake"
   );
+  const UserInformation = useReadContract({
+    abi: contract_abi,
+    address: contract_address,
+    functionName: "UserInformation",
+    args: [account.address],
+  });
+  
+  
+  useEffect(() => {
+    if (!UserInformation.isLoading) {
+      
+      setUserInformation(UserInformation.data);
+    }
+    
+  }, [UserInformation.isLoading,account.isConnected,account.address]);
 
   const handleButtonClick = (button: "Stake" | "Withdraw") => {
     setActiveButton(button);
   };
+  async function handleSubmit(
+    
+  ) {
+    let duration = 0;
+    let amountInWei = parseUnits(tokenAmount.toString(), 18);
+    if (selectedPackage == "lock") {
+      if (!selectedDuration) {
+        throw new Error("Please select a duration");
+        
+      }
+      duration = selectedDuration;
+      
+    }
+    console.log(duration);
+    try {
+    setLoading(true);
+    const hash = await approveTokens({
+      abi: token_abi,
+      address: token_address,
+      functionName: "approve",
+      args: [contract_address, amountInWei],
+    });
+    console.log("hash = ",hash)
+    const wait =await waitForTransactionReceipt(config, {
+      confirmations: 0,
+      
+      hash: hash,
+    });
+    console.log(wait)
+    
+      await farmTokens({
+        abi: contract_abi,
+        address: contract_address,
+        functionName: "farm",
+        args: [amountInWei, duration],
+      });
+      alert("Staked successfully");
+      setLoading(false);
+    } catch (error: any) {
+      alert(error.message);
+      setLoading(false);
+    }
+  }
 
-  console.log(activeButton);
   return (
     <>
       <div
@@ -168,7 +162,7 @@ const Card: FC = (): JSX.Element => {
         )}
         {isAccountConnected &&
           activeButton === "Stake" &&
-          selectedPackage === "locked" && (
+          selectedPackage === "lock" && (
             <DurationDropdown
               selectedDuration={selectedDuration}
               setSelectedDuration={setSelectedDuration}
@@ -180,8 +174,9 @@ const Card: FC = (): JSX.Element => {
             handleSubmit={() => {
               handleSubmit();
             }}
-          />
-        )}
+            />
+            )}
+            {loading && <div className="loading">Please wait...</div>}
       </div>
     </>
   );
