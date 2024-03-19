@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { parseUnits } from "viem";
+import { TransactionExecutionError, parseUnits } from "viem";
 import {
   contract_abi,
   contract_address,
@@ -76,6 +76,10 @@ const Card: FC = (): JSX.Element => {
   async function handleSubmit(
     
   ) {
+    if(loading){
+      alert("Transaction in progress")
+      return;
+    }
     let duration = 0;
     let amountInWei = parseUnits(tokenAmount.toString(), 18);
     if (selectedPackage == "lock") {
@@ -111,8 +115,11 @@ const Card: FC = (): JSX.Element => {
       });
       alert("Staked successfully");
       setLoading(false);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error) {
+      const e = error as TransactionExecutionError
+      alert(e.details);
+
+
       setLoading(false);
     }
   }

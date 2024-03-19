@@ -45,7 +45,7 @@ const DurationDropdown: FC<DurationFieldProps> = ({
 const ConnectAndHowButtons: FC = () => {
   return (
     <div className="btn2-container">
-      <button className="btn2 btn-how">How to Stake</button>
+      <button className="btn2 btn-how" onClick={()=>{window.open("https://coal-salary-0f7.notion.site/How-to-stake-BFM-tokens-88a761957cfe497d83efc301517c2865?pvs=25")}}>How to Stake</button>
       <w3m-button size="md" balance="hide" />
     </div>
   );
