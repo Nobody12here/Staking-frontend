@@ -150,3 +150,17 @@
     font-family: 'Inter';
 
 }
+.staking-calculator {
+  font-family: Inter;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  background-color: #f79c24;
+  padding: 8px;
+  border-radius: 12px;
+  border: none;
+  width: 80%;
+  margin-bottom: 32px;
+}

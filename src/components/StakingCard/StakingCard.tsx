@@ -183,6 +183,7 @@ const Card: FC = (): JSX.Element => {
             }}
             />
             )}
+            <button className="staking-calculator" onClick={()=>{window.location.href="https://staking-calculator-o6y8.vercel.app/"}}>Staking calculator</button>
             {loading && <div className="loading">Please wait...</div>}
       </div>
     </>
