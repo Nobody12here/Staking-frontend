@@ -32,7 +32,7 @@ const StakingDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
   return (
     <div className="text2-container">
       <h5 className="t1 heading2">$BFM Crypto Staking</h5>
-      <p className="t1 text2">Total in $BFM Staking</p>
+      <p className="t1 text2">Total Staked in $BFM Staking</p>
       <h3 className="t1 total-amount">{totalStaked} $BFM</h3>
     </div>
   );
