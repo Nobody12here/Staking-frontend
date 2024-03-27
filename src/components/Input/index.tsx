@@ -33,10 +33,11 @@ const DurationDropdown: FC<DurationFieldProps> = ({
         value={selectedDuration || ""}
         onChange={handleDurationChange}
       >
-        <option value="180">6 months (Monthly 5%)</option>
-        <option value="365">12 months (Monthly 7%)</option>
-        <option value="540">18 months (Monthly 8.5%)</option>
-        <option value="720">24 months (Monthly 10%)</option>
+        <option value="90">3 months (Monthly 1.2%)</option>
+        <option value="180">6 months (Monthly 2%)</option>
+        <option value="365">12 months (Monthly 3.5%)</option>
+        <option value="540">18 months (Monthly 5%)</option>
+        <option value="720">24 months (Monthly 7%)</option>
       </select>
     </div>
   );
@@ -102,7 +103,7 @@ const InputField: FC<InputFieldProps> = (props): JSX.Element => {
               onChange={handlePackageChange}
             />
             <label className="label" htmlFor="package1">
-              Unlocked staking at 2.5%
+              Unlocked staking at 1%
             </label>
           </div>
 

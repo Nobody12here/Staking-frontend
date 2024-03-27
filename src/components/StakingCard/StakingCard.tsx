@@ -20,7 +20,6 @@ import {
 import "./StakingCard.style.css";
 import { readUserInformations } from "../../utils/index.ts";
 
-
 interface WithdrawDetailsProps {
   userInformation: Array<unknown>;
 }
@@ -43,13 +42,13 @@ const Card: FC = (): JSX.Element => {
   const [loading, setLoading] = useState<boolean>(false);
   const { writeContractAsync: approveTokens } = useWriteContract();
   const { writeContractAsync: farmTokens } = useWriteContract();
- 
+
   const [userInformation, setUserInformation] = useState<unknown>(null);
   const [tokenAmount, setTokenAmount] = useState<number>(0);
   const [selectedPackage, setSelectedPackage] = useState<"unlock" | "lock">(
     "unlock"
   );
-  const [selectedDuration, setSelectedDuration] = useState<number | null>(14);
+  const [selectedDuration, setSelectedDuration] = useState<number | null>(90);
   const isAccountConnected = useAccount().isConnected;
   const [activeButton, setActiveButton] = useState<"Stake" | "Withdraw">(
     "Stake"
@@ -60,24 +59,19 @@ const Card: FC = (): JSX.Element => {
     functionName: "UserInformation",
     args: [account.address],
   });
-  
-  
+
   useEffect(() => {
     if (!UserInformation.isLoading) {
-      
       setUserInformation(UserInformation.data);
     }
-    
-  }, [UserInformation.isLoading,account.isConnected,account.address]);
+  }, [UserInformation.isLoading, account.isConnected, account.address]);
 
   const handleButtonClick = (button: "Stake" | "Withdraw") => {
     setActiveButton(button);
   };
-  async function handleSubmit(
-    
-  ) {
-    if(loading){
-      alert("Transaction in progress")
+  async function handleSubmit() {
+    if (loading) {
+      alert("Transaction in progress");
       return;
     }
     let duration = 0;
@@ -85,28 +79,26 @@ const Card: FC = (): JSX.Element => {
     if (selectedPackage == "lock") {
       if (!selectedDuration) {
         throw new Error("Please select a duration");
-        
       }
       duration = selectedDuration;
-      
     }
     console.log(duration);
     try {
-    setLoading(true);
-    const hash = await approveTokens({
-      abi: token_abi,
-      address: token_address,
-      functionName: "approve",
-      args: [contract_address, amountInWei],
-    });
-    console.log("hash = ",hash)
-    const wait =await waitForTransactionReceipt(config, {
-      confirmations: 0,
-      
-      hash: hash,
-    });
-    console.log(wait)
-    
+      setLoading(true);
+      const hash = await approveTokens({
+        abi: token_abi,
+        address: token_address,
+        functionName: "approve",
+        args: [contract_address, amountInWei],
+      });
+      console.log("hash = ", hash);
+      const wait = await waitForTransactionReceipt(config, {
+        confirmations: 0,
+
+        hash: hash,
+      });
+      console.log(wait);
+
       await farmTokens({
         abi: contract_abi,
         address: contract_address,
@@ -116,9 +108,9 @@ const Card: FC = (): JSX.Element => {
       alert("Staked successfully");
       setLoading(false);
     } catch (error) {
-      const e = error as TransactionExecutionError
-      alert(e.details);
-
+      const e = error as TransactionExecutionError;
+      alert(e.shortMessage);
+      console.log(error);
 
       setLoading(false);
     }
@@ -164,7 +156,6 @@ const Card: FC = (): JSX.Element => {
             setTokenAmount={setTokenAmount}
             package={selectedPackage}
             setPackage={setSelectedPackage}
-            
           />
         )}
         {isAccountConnected &&
@@ -181,10 +172,18 @@ const Card: FC = (): JSX.Element => {
             handleSubmit={() => {
               handleSubmit();
             }}
-            />
-            )}
-            <button className="staking-calculator" onClick={()=>{window.location.href="https://staking-calculator-o6y8.vercel.app/"}}>Staking calculator</button>
-            {loading && <div className="loading">Please wait...</div>}
+          />
+        )}
+        <button
+          className="staking-calculator"
+          onClick={() => {
+            window.location.href =
+              "https://staking-calculator-o6y8.vercel.app/";
+          }}
+        >
+          Staking calculator
+        </button>
+        {loading && <div className="loading">Please wait...</div>}
       </div>
     </>
   );

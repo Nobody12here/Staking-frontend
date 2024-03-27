@@ -16,11 +16,12 @@ interface StakingAllocations {
 //better to store this offline
 //this is the staking allocation changes this according to the updated values
 const stakingAllocations: StakingAllocations = {
-  "0": 2500000000,
-  "180": 5000000000,
-  "365": 7000000000,
-  "540": 8500000000,
-  "720": 10000000000,
+  "0": 33333333,       // 0.033333333% per day
+  "90": 1200000000,    // 1.2% for 3 months
+  "180": 2000000000,   // 2% for 6 months
+  "365": 3500000000,   // 3.5% for 12 months
+  "540": 5000000000,   // 5%
+  "720": 7000000000    // 7%
 };
 async function unstake(
   index: number[],
