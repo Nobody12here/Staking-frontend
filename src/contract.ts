@@ -1,5 +1,5 @@
 import { erc20Abi } from "viem";
-const contract_address = "0xae5b6d4D4A8aA7724a1285cA45B47AB7f83b2120"
+const contract_address = "0x8f3bDc0f4b2d2ba07172bFD4a9aE33B942C64514"
 const contract_abi = [
 	{
 		"inputs": [
@@ -285,6 +285,11 @@ const contract_abi = [
 				"internalType": "uint256",
 				"name": "amount",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_lockableDays",
+				"type": "uint256"
 			}
 		],
 		"name": "changeMinimmumAmount",
@@ -296,22 +301,32 @@ const contract_abi = [
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "_14dayspercent",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_30dayspercent",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_60dayspercent",
+				"name": "_0dayspercent",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
 				"name": "_90dayspercent",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_180dayspercent",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_365dayspercent",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_540dayspercent",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_720dayspercent",
 				"type": "uint256"
 			}
 		],
@@ -513,8 +528,14 @@ const contract_abi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "minimumDeposit",
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "minimumDeposits",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -613,6 +634,19 @@ const contract_abi = [
 	{
 		"inputs": [],
 		"name": "time",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalStaked",
 		"outputs": [
 			{
 				"internalType": "uint256",

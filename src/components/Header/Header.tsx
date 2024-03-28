@@ -11,13 +11,26 @@ function Header() {
             <div className="header-container">
                 <img src={Logo} alt="Logo" className='Logo' width={"228px"} />
                 <div className='social-icons'>
+                    <a href='https://discord.gg/BenefitMine'>
                     <img src={Discord} alt="discord" width={'32px'} height={'32px'} />
+                    </a>
+                    <a href='https://twitter.com/benefitmine'>
                     <img src={Twitter} alt="twiter" width={'32px'} height={'32px'} />
+                    </a>
+                    <a href='https://t.me/BenefitMine'>
+
                     <img src={Telegram} alt="telegram" width={'32px'} height={'32px'} />
+                    </a>
+                    <a href="https://www.instagram.com/benefitmine_official">
+
                     <img src={Whatsapp} alt="whatsapp" width={'32px'} height={'32px'} />
+                    </a>
+                    <a href="https://www.youtube.com/@benefitmine_official?sub_confirmation=1">
+
                     <img src={Youtube} alt="youtube" width={'32px'} height={'32px'} />
+                    </a>
                 </div>
-                <button className='offical-btn'>Visit Official Website</button>
+                <button className='offical-btn' onClick={()=>{window.location.href = ("https://benefitmine.io/")}}>Visit Official Website</button>
             </div>
         </>
      );

@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react";
-import { TransactionExecutionError, parseUnits } from "viem";
+import { TransactionExecutionError, formatEther, parseUnits } from "viem";
 import {
   contract_abi,
   contract_address,
@@ -18,21 +18,18 @@ import {
   DisconnectAndSubmitButtons,
 } from "../Input";
 import "./StakingCard.style.css";
-import { readUserInformations } from "../../utils/index.ts";
+
 
 interface WithdrawDetailsProps {
-  userInformation: Array<unknown>;
+  totalStaked: bigint,
 }
-const StakingDetails: FC<WithdrawDetailsProps> = ({ userInformation }) => {
-  const [totalStaked, setTotalStaked] = useState<string>("0");
-  useEffect(() => {
-    readUserInformations(userInformation, setTotalStaked);
-  }, [userInformation]);
+const StakingDetails: FC<WithdrawDetailsProps> = ({ totalStaked }) => {
+ 
   return (
     <div className="text2-container">
       <h5 className="t1 heading2">$BFM Crypto Staking</h5>
       <p className="t1 text2">Total Staked in $BFM Staking</p>
-      <h3 className="t1 total-amount">{totalStaked} $BFM</h3>
+      <h3 className="t1 total-amount">{formatEther(totalStaked)} $BFM</h3>
     </div>
   );
 };
@@ -53,6 +50,13 @@ const Card: FC = (): JSX.Element => {
   const [activeButton, setActiveButton] = useState<"Stake" | "Withdraw">(
     "Stake"
   );
+  const [totalStaked,setTotalStaked] = useState<unknown>(0);
+  const {data:TotalStaked} = useReadContract({
+    abi: contract_abi,
+    address: contract_address,
+    functionName:"totalStaked"
+  }); 
+  console.log("Total staked ",TotalStaked)
   const UserInformation = useReadContract({
     abi: contract_abi,
     address: contract_address,
@@ -61,10 +65,14 @@ const Card: FC = (): JSX.Element => {
   });
 
   useEffect(() => {
+    if(TotalStaked){
+      console.log("total staked = ",TotalStaked)
+      setTotalStaked(TotalStaked);
+    }
     if (!UserInformation.isLoading) {
       setUserInformation(UserInformation.data);
     }
-  }, [UserInformation.isLoading, account.isConnected, account.address]);
+  }, [UserInformation.isLoading,account.isConnected,TotalStaked]);
 
   const handleButtonClick = (button: "Stake" | "Withdraw") => {
     setActiveButton(button);
@@ -141,7 +149,7 @@ const Card: FC = (): JSX.Element => {
         </div>
 
         {activeButton === "Stake" && (
-          <StakingDetails userInformation={userInformation as Array<unknown>} />
+          <StakingDetails totalStaked={totalStaked as bigint} />
         )}
         {activeButton === "Withdraw" && (
           <WithdrawDetails
